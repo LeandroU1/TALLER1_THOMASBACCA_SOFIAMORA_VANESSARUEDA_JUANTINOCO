@@ -1,0 +1,120 @@
+class ArrayList:
+
+    def __init__(self, size=100, initial_elements=None):
+        if initial_elements is None:
+            initial_elements = []
+
+        self.capacidad = size
+        self.datos = [None] * size
+        self.tamaño = 0
+
+        for elemento in initial_elements:
+            self.append(elemento)
+
+    def __str__(self):
+        return str(self.datos[:self.tamaño])
+
+    def __len__(self):
+        return self.tamaño
+
+    def isEmpty(self):
+        return self.tamaño == 0
+
+    def __getitem__(self, index):
+        if index < 0 or index >= self.tamaño:
+            raise IndexError("No existe el index")
+        return self.datos[index]
+
+    def __iter__(self):
+        for i in range(self.tamaño):
+            yield self.datos[i]
+
+    def __contains__(self, element):
+        for i in range(self.tamaño):
+            if self.datos[i] == element:
+                return True
+        return False
+
+    def append(self, element):
+        if self.tamaño == self.capacidad:
+            raise OverflowError("La lista está llena")
+
+        self.datos[self.tamaño] = element
+        self.tamaño += 1
+
+    def insert(self, index, element):
+        if index < 0 or index > self.tamaño:
+            raise IndexError("No existe el index")
+
+        if self.tamaño == self.capacidad:
+            raise OverflowError("La lista está llena")
+
+        for i in range(self.tamaño, index, -1):
+            self.datos[i] = self.datos[i - 1]
+
+        self.datos[index] = element
+        self.tamaño += 1
+
+    def remove(self, element):
+        for i in range(self.tamaño):
+            if self.datos[i] == element:
+                for j in range(i, self.tamaño - 1):
+                    self.datos[j] = self.datos[j + 1]
+
+                self.datos[self.tamaño - 1] = None
+                self.tamaño -= 1
+                return
+
+        raise ValueError("El elemento en esa colección existe")
+
+    def pop(self, index):
+        if index < 0 or index >= self.tamaño:
+            raise IndexError("No existe ese indice")
+
+        value = self.datos[index]
+
+        for i in range(index, self.tamaño - 1):
+            self.datos[i] = self.datos[i + 1]
+
+        self.datos[self.tamaño - 1] = None
+        self.tamaño -= 1
+        return value
+
+    def clear(self):
+        self.datos = [None] * self.capacidad
+        self.tamaño = 0
+
+
+# PRUEBA EN TERMINAL
+
+lista = LinkedList([4, 5, 6, 7, 8, 9])
+
+print("Lista inicial:")
+print(lista)
+
+lista.append(4)
+print("Después de append(4):")
+print(lista)
+
+lista.insert(1, 10)
+print("Después de insert(1, 10):")
+print(lista)
+
+lista.remove(5)
+print("Después de remove(5):")
+print(lista)
+
+print("Elemento en índice 3:")
+print(lista[3])
+
+print("Pop en índice 0:")
+print(lista.pop(0))
+
+print("Lista final:")
+print(lista)
+
+print("¿Está vacío?")
+print(lista.isEmpty())
+
+print("Tamaño:")
+print(len(lista))
